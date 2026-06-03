@@ -1,0 +1,11 @@
+node_modules/
+dist/
+out/
+*.vsix
+.DS_Store
+*.log
+
+# Claude Code
+.claude/
+CLAUDE.md
+SUPERPOWERS.md
