@@ -1,0 +1,99 @@
+{
+  "name": "agentic-assets-manager",
+  "displayName": "Agentic Assets Manager",
+  "description": "Scan, view, and manage agentic assets (agents, skills, instructions, prompts) across your project.",
+  "version": "0.0.1",
+  "publisher": "agentic-assets",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onView:agenticAssets.view",
+    "onCommand:agenticAssets.openCanvas"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "agenticAssets",
+          "title": "Agentic Assets",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "agenticAssets": [
+        {
+          "id": "agenticAssets.view",
+          "type": "webview",
+          "name": "Agentic Assets"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "agenticAssets.refresh",
+        "title": "Refresh Agentic Assets",
+        "category": "Agentic Assets",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "agenticAssets.showLogs",
+        "title": "Show Logs",
+        "category": "Agentic Assets",
+        "icon": "$(output)"
+      },
+      {
+        "command": "agenticAssets.openCanvas",
+        "title": "Open Workflow Canvas",
+        "category": "Agentic Assets",
+        "icon": "$(circuit-board)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "agenticAssets.openCanvas",
+          "when": "view == agenticAssets.view",
+          "group": "navigation"
+        },
+        {
+          "command": "agenticAssets.refresh",
+          "when": "view == agenticAssets.view",
+          "group": "navigation"
+        },
+        {
+          "command": "agenticAssets.showLogs",
+          "when": "view == agenticAssets.view",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "build": "node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "compile-tests": "tsc -p tsconfig.json --noEmit",
+    "test": "node --test --import tsx ./src/scanner/classifier.test.ts ./src/canvas/workflowFile.test.ts",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^2.24.0",
+    "esbuild": "^0.20.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}

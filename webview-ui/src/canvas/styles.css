@@ -1,0 +1,260 @@
+:root {
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--vscode-font-family);
+  font-size: var(--vscode-font-size, 13px);
+  color: var(--vscode-foreground);
+  background-color: var(--vscode-editor-background);
+}
+
+.canvas {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Toolbar */
+.canvas__toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--vscode-panel-border, transparent);
+  background-color: var(--vscode-editorWidget-background, var(--vscode-editor-background));
+}
+
+.canvas__btn {
+  font-family: inherit;
+  font-size: 12px;
+  color: var(--vscode-button-secondaryForeground, var(--vscode-foreground));
+  background-color: var(--vscode-button-secondaryBackground, transparent);
+  border: 1px solid var(--vscode-button-border, transparent);
+  border-radius: 3px;
+  padding: 3px 10px;
+  cursor: pointer;
+}
+
+.canvas__btn:hover:not(:disabled) {
+  background-color: var(--vscode-button-secondaryHoverBackground, var(--vscode-list-hoverBackground));
+}
+
+.canvas__btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.canvas__spacer {
+  flex: 1;
+}
+
+.canvas__hint {
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+/* Viewport + surface */
+.canvas__viewport {
+  flex: 1;
+  overflow: auto;
+  background-color: var(--vscode-editor-background);
+  background-image: radial-gradient(
+    var(--vscode-editorWidget-border, rgba(127, 127, 127, 0.18)) 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
+}
+
+.canvas__surface {
+  position: relative;
+}
+
+.canvas__edges {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.canvas__edge {
+  fill: none;
+  stroke: var(--vscode-charts-foreground, var(--vscode-foreground));
+  stroke-width: 1.8;
+  opacity: 0.75;
+}
+
+.canvas__edge.is-selected {
+  stroke: var(--vscode-focusBorder);
+  stroke-width: 2.6;
+  opacity: 1;
+}
+
+.canvas__edge--pending {
+  stroke-dasharray: 5 4;
+  opacity: 0.6;
+}
+
+.canvas__edge-hit {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 12;
+  pointer-events: stroke;
+  cursor: pointer;
+}
+
+.canvas__arrow {
+  fill: var(--vscode-charts-foreground, var(--vscode-foreground));
+}
+
+/* Nodes */
+.canvas-node {
+  position: absolute;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  padding: 6px 10px;
+  border: 1px solid var(--vscode-widget-border, var(--vscode-panel-border, rgba(127, 127, 127, 0.4)));
+  border-radius: 6px;
+  background-color: var(--vscode-editorWidget-background, var(--vscode-editor-background));
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+.canvas-node:active {
+  cursor: grabbing;
+}
+
+.canvas-node.is-selected {
+  border-color: var(--vscode-focusBorder);
+  box-shadow: 0 0 0 1px var(--vscode-focusBorder);
+}
+
+.canvas-node.is-missing {
+  border-color: var(--vscode-editorWarning-foreground, orange);
+  opacity: 0.85;
+}
+
+.canvas-node__badge {
+  align-self: flex-start;
+  font-size: 9px;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px 5px;
+  border-radius: 7px;
+  color: var(--vscode-editor-background, var(--vscode-badge-foreground));
+  background-color: var(--vscode-badge-background);
+}
+
+.canvas-node__badge--agent {
+  background-color: var(--vscode-charts-purple, var(--vscode-badge-background));
+}
+.canvas-node__badge--skill {
+  background-color: var(--vscode-charts-green, var(--vscode-badge-background));
+}
+.canvas-node__badge--instruction {
+  background-color: var(--vscode-charts-orange, var(--vscode-badge-background));
+}
+.canvas-node__badge--prompt {
+  background-color: var(--vscode-charts-blue, var(--vscode-badge-background));
+}
+
+.canvas-node__name {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.canvas-node__port {
+  position: absolute;
+  right: -7px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--vscode-focusBorder);
+  border: 2px solid var(--vscode-editor-background);
+  cursor: crosshair;
+}
+
+.canvas-node__port:hover {
+  transform: translateY(-50%) scale(1.2);
+}
+
+.canvas__empty {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  max-width: 360px;
+  text-align: center;
+  opacity: 0.6;
+  font-style: italic;
+}
+
+/* Node delete button */
+.canvas-node__delete {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 12px;
+  line-height: 1;
+  border-radius: 50%;
+  border: 1px solid var(--vscode-editor-background);
+  color: var(--vscode-editor-background, var(--vscode-badge-foreground));
+  background-color: var(--vscode-editorError-foreground, #e51400);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.08s ease;
+}
+
+.canvas-node:hover .canvas-node__delete,
+.canvas-node.is-selected .canvas-node__delete {
+  opacity: 1;
+}
+
+.canvas-node__delete:hover {
+  filter: brightness(1.15);
+}
+
+/* Edge remove control */
+.canvas__edge-remove {
+  opacity: 0;
+  pointer-events: none;
+  cursor: pointer;
+  transition: opacity 0.08s ease;
+}
+
+.canvas__edge-group:hover .canvas__edge-remove,
+.canvas__edge-group.is-selected .canvas__edge-remove {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.canvas__edge-remove circle {
+  fill: var(--vscode-editorError-foreground, #e51400);
+  stroke: var(--vscode-editor-background);
+  stroke-width: 1.5;
+}
+
+.canvas__edge-remove path {
+  stroke: var(--vscode-editor-background, #fff);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  fill: none;
+}
